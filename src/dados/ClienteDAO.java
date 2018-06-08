@@ -94,7 +94,7 @@ public class ClienteDAO {
 			pst.setString(++index, Sexo.valueOf(cliente.getSexo()).toString());
 			pst.setDate(++index, new java.sql.Date(cliente.getNascimento().getTime()));
 			pst.setString(++index, cliente.getCpf());
-
+			
 			return pst.executeUpdate();
 
 		} catch (Exception e) {

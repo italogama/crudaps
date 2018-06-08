@@ -32,7 +32,7 @@ public class RegraCliente {
 			throw new Exception("Nome está vazio");
 		} else if (cliente.getCpf().isEmpty()) {
 			throw new Exception("CPF está vazio");
-		} else if (cliente.getSexo().isEmpty()) {
+		} else if (cliente.getSexo().trim().length() == 0) {
 			throw new Exception("Preencha o sexo");
 		} else if (cliente.getCpf().length() != 11) {
 			throw new Exception("CPF deve conter 11 Digitos!");

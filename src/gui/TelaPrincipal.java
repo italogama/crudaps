@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 
 import model.Cliente;
 import negocio.RegraCliente;
+import java.awt.Font;
 
 
 public class TelaPrincipal extends JFrame {
@@ -73,40 +74,40 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(lblStatusServer);
 		
 		JLabel lblNome = new JLabel("Nome:");
-		lblNome.setBounds(20, 129, 46, 14);
+		lblNome.setBounds(20, 165, 46, 14);
 		contentPane.add(lblNome);
 		
 		JLabel lblCpf = new JLabel("CPF:");
-		lblCpf.setBounds(20, 154, 46, 14);
+		lblCpf.setBounds(20, 190, 46, 14);
 		contentPane.add(lblCpf);
 		
 		JLabel lblSexo = new JLabel("Sexo:");
-		lblSexo.setBounds(20, 207, 46, 14);
+		lblSexo.setBounds(20, 243, 46, 14);
 		contentPane.add(lblSexo);
 		
 		JLabel lblDataDeNascimento = new JLabel("Data de Nascimento:");
-		lblDataDeNascimento.setBounds(20, 182, 128, 14);
+		lblDataDeNascimento.setBounds(20, 218, 128, 14);
 		contentPane.add(lblDataDeNascimento);
 		
 		txtNome = new JTextField();
-		txtNome.setBounds(62, 124, 164, 20);
+		txtNome.setBounds(62, 160, 164, 20);
 		contentPane.add(txtNome);
 		txtNome.setColumns(10);
 		
 		txtCpf = new JTextField();
-		txtCpf.setBounds(62, 150, 163, 20);
+		txtCpf.setBounds(62, 186, 163, 20);
 		contentPane.add(txtCpf);
 		txtCpf.setColumns(10);
 		
 		txtNascimento = new JTextField();
-		txtNascimento.setBounds(141, 179, 86, 20);
+		txtNascimento.setBounds(141, 215, 86, 20);
 		contentPane.add(txtNascimento);
 		txtNascimento.setColumns(10);
 		
 		cboSexo = new JComboBox();
-		cboSexo.setModel(new DefaultComboBoxModel(new String[] { " ", "M", "F" }));
+		cboSexo.setModel(new DefaultComboBoxModel(new String[] { "", "M", "F" }));
 		cboSexo.setSelectedIndex(0);
-		cboSexo.setBounds(62, 204, 71, 20);
+		cboSexo.setBounds(62, 240, 71, 20);
 		contentPane.add(cboSexo);
 		
 		JButton btnInserir = new JButton("");
@@ -223,13 +224,23 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(btnDeletar);
 		
 		txtCpfConsulta = new JTextField();
-		txtCpfConsulta.setBounds(120, 48, 86, 20);
+		txtCpfConsulta.setBounds(123, 70, 128, 20);
 		contentPane.add(txtCpfConsulta);
 		txtCpfConsulta.setColumns(10);
 		
 		JLabel lblConsultaPorCpf = new JLabel("Consulta por CPF:");
-		lblConsultaPorCpf.setBounds(10, 51, 102, 14);
+		lblConsultaPorCpf.setBounds(13, 73, 102, 14);
 		contentPane.add(lblConsultaPorCpf);
+		
+		JLabel lblCadastro = new JLabel("CADASTRO ");
+		lblCadastro.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblCadastro.setBounds(188, 118, 179, 31);
+		contentPane.add(lblCadastro);
+		
+		JLabel lblConsulta = new JLabel("CONSULTA");
+		lblConsulta.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblConsulta.setBounds(188, 33, 179, 31);
+		contentPane.add(lblConsulta);
 		t.start();
 	}
 }
