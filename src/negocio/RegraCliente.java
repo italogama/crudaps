@@ -11,8 +11,11 @@ public class RegraCliente {
 		clienteDao = new ClienteDAO();
 	}
 
-	public Cliente consultaCliente(String cpf) {
-
+	public Cliente consultaCliente(String cpf) throws Exception {
+		
+		if (cpf == null || cpf.isEmpty()) {
+			throw new Exception("Preencha o campo CPF para realizar consulta");
+		}
 		return clienteDao.consultar(cpf);
 
 	}

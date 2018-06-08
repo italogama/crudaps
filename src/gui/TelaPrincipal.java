@@ -118,8 +118,10 @@ public class TelaPrincipal extends JFrame {
 				cliente.setNome(txtNome.getText());
 				cliente.setCpf(txtCpf.getText());
 				cliente.setSexo(cboSexo.getSelectedItem().toString());
+				if (!txtNascimento.getText().isEmpty()) {
 				cliente.setNascimento(new Date(txtNascimento.getText()));
-
+				}
+				
 				int adicionado = 0;
 
 				try {
@@ -147,10 +149,16 @@ public class TelaPrincipal extends JFrame {
 		JButton btnConsultar = new JButton("");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Cliente cliente = regraCliente.consultaCliente(txtCpfConsulta.getText());
+				Cliente cliente = null;
+				try {
+					cliente = regraCliente.consultaCliente(txtCpfConsulta.getText());
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					return;
+				}
 				
 				if (cliente == null) {
-					JOptionPane.showMessageDialog(null, "Usuario não encontrado!");
+					JOptionPane.showMessageDialog(null, "Cliente não encontrado!");
 					return;
 				}else {
 					JOptionPane.showMessageDialog(null, "Consulta Realizada");
@@ -178,7 +186,9 @@ public class TelaPrincipal extends JFrame {
 				cliente.setNome(txtNome.getText());
 				cliente.setCpf(txtCpf.getText());
 				cliente.setSexo(cboSexo.getSelectedItem().toString());
-				cliente.setNascimento(new Date(txtNascimento.getText()));
+				if (!txtNascimento.getText().isEmpty()) {
+					cliente.setNascimento(new Date(txtNascimento.getText()));
+				}
 				int adicionado = 0;
 				try {
 					adicionado = regraCliente.adicionarOrAlterar(cliente,"U");
@@ -214,7 +224,7 @@ public class TelaPrincipal extends JFrame {
 					txtNascimento.setText(null);
 					cboSexo.setSelectedItem(null);
 				} else {
-					JOptionPane.showConfirmDialog(null, "Cliente não encontrado!");
+					JOptionPane.showMessageDialog(null, "Cliente não informado!");
 				}
 			}
 		});
