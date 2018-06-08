@@ -1,33 +1,25 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
-import br.com.agencia.model.Usuario;
-import conexaoBanco.ConexaoMySQL;
-import gui.StatusServer;
-import model.Cliente;
 
-import javax.swing.JComboBox;
+import model.Cliente;
+import negocio.RegraCliente;
 
 
 public class TelaPrincipal extends JFrame {
@@ -36,6 +28,9 @@ public class TelaPrincipal extends JFrame {
 	private JTextField txtNome;
 	private JTextField txtCpf;
 	private JTextField txtNascimento;
+	private JComboBox cboSexo;
+	private RegraCliente regraCliente;
+	private JTextField txtCpfConsulta;
 
 	/**
 	 * Launch the application.
@@ -54,7 +49,9 @@ public class TelaPrincipal extends JFrame {
 	}
 
 	public TelaPrincipal() {
-
+		
+		regraCliente = new RegraCliente();
+		
 		setTitle(".: CRUD APS  :.");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(480, 190, 486, 442);
@@ -106,7 +103,9 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(txtNascimento);
 		txtNascimento.setColumns(10);
 		
-		JComboBox cboSexo = new JComboBox();
+		cboSexo = new JComboBox();
+		cboSexo.setModel(new DefaultComboBoxModel(new String[] { " ", "M", "F" }));
+		cboSexo.setSelectedIndex(0);
 		cboSexo.setBounds(62, 204, 71, 20);
 		contentPane.add(cboSexo);
 		
@@ -117,20 +116,20 @@ public class TelaPrincipal extends JFrame {
 
 				cliente.setNome(txtNome.getText());
 				cliente.setCpf(txtCpf.getText());
-				cliente.setSexo(cboSexo.getSelectedItem());
-				cliente.setDate(txtNascimento.getText());
+				cliente.setSexo(cboSexo.getSelectedItem().toString());
+				cliente.setNascimento(new Date(txtNascimento.getText()));
 
 				int adicionado = 0;
 
 				try {
-					adicionado = regraUsuario.adicionarOrAlterar(cliente);
-				} catch (Exception e) {
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(null, e.getMessage());
+					adicionado = regraCliente.adicionarOrAlterar(cliente,"I");
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null, ex.getMessage());
 				}
 
 				if (adicionado > 0) {
-					JOptionPane.showMessageDialog(null, "Usuario cadastrado com sucesso!!");
+					JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!!");
 					txtNome.setText(null);
 					txtCpf.setText(null);
 					cboSexo.setSelectedItem(null);
@@ -145,22 +144,92 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(btnInserir);
 		
 		JButton btnConsultar = new JButton("");
+		btnConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Cliente cliente = regraCliente.consultaCliente(txtCpfConsulta.getText());
+				
+				if (cliente == null) {
+					JOptionPane.showMessageDialog(null, "Usuario não encontrado!");
+					return;
+				}else {
+					JOptionPane.showMessageDialog(null, "Consulta Realizada");
+				}	
+					
+				txtNome.setText(cliente.getNome());
+				txtCpf.setText(cliente.getCpf());
+				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+				String dataFormatada = formato.format(cliente.getNascimento());
+				txtNascimento.setText(dataFormatada);
+				cboSexo.setSelectedItem(cliente.getSexo().toString());
+			}
+		});
 		btnConsultar.setToolTipText("Consultar");
 		btnConsultar.setIcon(new ImageIcon("img\\read.png"));
 		btnConsultar.setBounds(126, 294, 80, 80);
 		contentPane.add(btnConsultar);
 		
 		JButton btnAtualizar = new JButton("");
+		btnAtualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Cliente cliente = new Cliente();
+				
+				cliente.setNome(txtNome.getText());
+				cliente.setCpf(txtCpf.getText());
+				cliente.setSexo(cboSexo.getSelectedItem().toString());
+				cliente.setNascimento(new Date(txtNascimento.getText()));
+				int adicionado = 0;
+				try {
+					adicionado = regraCliente.adicionarOrAlterar(cliente,"U");
+				} catch (Exception exx) {
+					exx.printStackTrace();
+					JOptionPane.showMessageDialog(null, exx.getMessage());
+				}
+
+				if (adicionado > 0) {
+					JOptionPane.showMessageDialog(null, "Dados do cliente alterados com sucesso!!");
+					txtNome.setText(null);
+					txtCpf.setText(null);
+					txtNascimento.setText(null);
+					cboSexo.setSelectedItem(null);
+				}
+
+			}
+		});
 		btnAtualizar.setToolTipText("Atualizar");
 		btnAtualizar.setIcon(new ImageIcon("img\\update.png"));
 		btnAtualizar.setBounds(241, 294, 80, 80);
 		contentPane.add(btnAtualizar);
 		
 		JButton btnDeletar = new JButton("");
+		btnDeletar.addActionListener(new ActionListener() {
+			// METODO PARA REMOVER CLIENTE
+			public void actionPerformed(ActionEvent e) {
+				int apagado = regraCliente.remover(txtCpfConsulta.getText());
+				if (apagado > 0) {
+					JOptionPane.showMessageDialog(null, "Cliente removido com sucesso!");
+					txtNome.setText(null);
+					txtCpf.setText(null);
+					txtNascimento.setText(null);
+					cboSexo.setSelectedItem(null);
+				} else {
+					JOptionPane.showConfirmDialog(null, "Cliente não encontrado!");
+				}
+			}
+		});
 		btnDeletar.setToolTipText("Deletar");
 		btnDeletar.setIcon(new ImageIcon("img\\delete.png"));
 		btnDeletar.setBounds(357, 294, 80, 80);
 		contentPane.add(btnDeletar);
+		
+		txtCpfConsulta = new JTextField();
+		txtCpfConsulta.setBounds(120, 48, 86, 20);
+		contentPane.add(txtCpfConsulta);
+		txtCpfConsulta.setColumns(10);
+		
+		JLabel lblConsultaPorCpf = new JLabel("Consulta por CPF:");
+		lblConsultaPorCpf.setBounds(10, 51, 102, 14);
+		contentPane.add(lblConsultaPorCpf);
 		t.start();
 	}
 }

@@ -11,9 +11,9 @@ public class RegraCliente {
 		clienteDao = new ClienteDAO();
 	}
 
-	public Cliente consultaCliente(String id) {
+	public Cliente consultaCliente(String cpf) {
 
-		return clienteDao.consultar(id);
+		return clienteDao.consultar(cpf);
 
 	}
 
@@ -26,7 +26,7 @@ public class RegraCliente {
 	 * @return
 	 * @throws Exception
 	 */
-	public int adicionarOrAlterar(Cliente cliente) throws Exception {
+	public int adicionarOrAlterar(Cliente cliente,String tpOperacao) throws Exception {
 
 		if (cliente.getNome().isEmpty()) {
 			throw new Exception("Nome está vazio");
@@ -39,15 +39,15 @@ public class RegraCliente {
 		} else if (!cliente.getCpf().matches("[0-9]*")) {
 			throw new Exception("CPF Invalido, deve conter apenas numeros!");
 		}
-		if (cliente.getNome() != null && !cliente.getNome().isEmpty()) {
+		if (tpOperacao.equals("U")) {
 			return clienteDao.atualizar(cliente);
 		} else {
 			return clienteDao.adicionar(cliente);
 		}
 	}
 
-	public int remover(String id) {
-		return clienteDao.remover(id);
+	public int remover(String cpf) {
+		return clienteDao.remover(cpf);
 
 	}
 

@@ -34,6 +34,11 @@ public class Cliente {
 		this.nascimento = nascimento;
 	}
 	
+	public enum Sexo{   
+	    M, F;
+	   
+	    }
+	
 	
 	
 	
