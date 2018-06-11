@@ -251,6 +251,16 @@ public class TelaPrincipal extends JFrame {
 		lblConsulta.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblConsulta.setBounds(188, 33, 179, 31);
 		contentPane.add(lblConsulta);
+		
+		JButton btnListarTodos = new JButton("Listar Todos ");
+		btnListarTodos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				TelaListar telalistar = new TelaListar();
+				telalistar.setVisible(true);
+			}
+		});
+		btnListarTodos.setBounds(293, 79, 120, 23);
+		contentPane.add(btnListarTodos);
 		t.start();
 	}
 }
